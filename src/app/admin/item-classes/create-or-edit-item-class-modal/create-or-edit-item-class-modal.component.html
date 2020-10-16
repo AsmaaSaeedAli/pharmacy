@@ -1,0 +1,51 @@
+<div bsModal #createOrEditModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="createOrEditModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #itemclassForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="itemclass.id">{{l("EditItemClass")}}</span>
+                        <span *ngIf="!itemclass.id">{{l("CreateNewItemClass")}}</span>
+                    </h4>
+                    <button type="button" class="close" (click)="close()" aria-label="Close" [disabled]="saving">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="itemclass_Code">{{l("Code")}}</label>
+                        <input type="text" id="itemclass_Code" class="form-control" [(ngModel)]="itemclass.code"
+                            name="Code" />
+                    </div>
+                    <div class="form-group">
+                        <localized-text #localizedName label="Name" [(json)]="itemclass.name" required
+                            [inlineForm]="true"></localized-text>
+                    </div>
+                    <div class="form-group">
+                        <label for="itemclass_ItemNumberStart" class="required">{{l("ItemNumber Start")}}</label>
+                        <input type="number" id="itemclass_ItemNumberStart" class="form-control" [(ngModel)]="itemclass.itemNumberStart"
+                            name="itemNumberStart" required/>
+                    </div>
+                    <div class="form-group">
+                        <label for="itemclass_IsActive" class="kt-checkbox">
+                            <input type="checkbox" id="itemclass_IsActive" [(ngModel)]="itemclass.isActive"
+                                name="IsActive" />
+                            {{l("IsActive")}}
+                            <span></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-default"
+                        (click)="close()">{{l("Cancel")}}</button>
+                    <span>&nbsp;&nbsp;</span>
+                    <button type="submit" class="btn btn-primary" [disabled]="!itemclassForm.form.valid || !localizedName.valid()"
+                        [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i>
+                        <span> {{l("Save")}} </span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>

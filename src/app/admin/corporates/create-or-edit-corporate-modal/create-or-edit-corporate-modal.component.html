@@ -1,0 +1,97 @@
+<div bsModal #createOrEditModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="createOrEditModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #corporateForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="corporate.id">{{l("EditCorporate")}}</span>
+                        <span *ngIf="!corporate.id">{{l("CreateNewCorporate")}}</span>
+                    </h4>
+                    <button type="button" class="close" (click)="close()" aria-label="Close" [disabled]="saving">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        
+                        <div class="col-12 form-group">
+                            <localized-text #localizedName label="Name" [(json)]="corporate.name" required [inlineForm]="true">
+                            </localized-text>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label for="Corporate_Country" class="required">{{l("Country")}}</label>
+                            <select class="form-control" name="CountryId" id="countryId" required [(ngModel)]="corporate.countryId">
+                                <option [value]="null">{{l('PleaseSelect')}}</option>
+                                <option *ngFor="let c of countries" [value]="c.value">{{c.name}}</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label for="Corporate_City" class="required">{{l("City")}}</label>
+                            <select class="form-control" name="CityId" id="cityId" required [(ngModel)]="corporate.cityId">
+                                <option [value]="null">{{l('PleaseSelect')}}</option>
+                                <option *ngFor="let c of cities" [value]="c.value">{{c.name}}</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6 form-group">
+                            <label for="Corporate_ContactName">{{l("ContactName")}}</label>
+                            <input type="test" id="Corporate_ContactName" class="form-control" [(ngModel)]="corporate.contactName"
+                                name="ContactName" />
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label for="Corporate_ContactPhone" class="required">{{l("ContactPhone")}}</label>
+                            <input type="test" id="Corporate_ContactPhone" class="form-control" required [(ngModel)]="corporate.contactPhone"
+                                name="ContactPhone" />
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label for="Corporate_ContactEmail" class="required">{{l("ContactEmail")}}</label>
+                            <input type="test" id="Corporate_ContactEmail" class="form-control" required [(ngModel)]="corporate.contactEmail"
+                                name="ContactEmail" />
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label for="Corporate_Notes">{{l("Notes")}}</label>
+                            <textarea type="test" id="Corporate_Notes" class="form-control" name="Notes"  [(ngModel)]="corporate.notes"></textarea>
+                               
+                        </div>
+
+                        <div class="col-md-6 form-group">
+                            <label for="Corporate_Logo">{{l("Logo")}}</label>
+                            <input  #imageInput
+                                  class="form-control"
+                                   type="file"
+                                   accept="image/*"
+                                   name="Logo"
+                                   (change)="uploadFile($event)"
+                                   [(ngModel)]="corporate.logo"/>
+                                   
+                                   
+                          
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <img [src]="corporate.logo" height="100" width="100">
+                        </div>
+                        <div class="form-group">
+                            <label for="Corporate_IsActive" class="kt-checkbox">
+                                <input type="checkbox" id="Corporate_IsActive" [(ngModel)]="corporate.isActive" name="IsActive" />
+                                {{l("IsActive")}}
+                                <span></span>
+                            </label>
+                        </div>
+
+                    </div>
+                  
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-default"
+                        (click)="close()">{{l("Cancel")}}</button>
+                    <span>&nbsp;&nbsp;</span>
+                    <button type="submit" class="btn btn-primary" [disabled]="!corporateForm.form.valid"
+                        [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i>
+                        <span> {{l("Save")}} </span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>

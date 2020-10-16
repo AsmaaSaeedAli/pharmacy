@@ -1,0 +1,20 @@
+<form #localizedNameForm="ngForm" parentFormConnect>
+    <div class="row">
+
+        <div [class]="inlineForm ? 'col-6': 'col-12'" *ngFor="let translation of translations; let i = index;">
+            <div class="form-group">
+                <label class="{{(required == '' || required == 'true') ? 'required' : ''}}">{{l(label) + " " + l(translations[i].languageCode) + " "}}</label>
+
+                <textarea #input="ngModel" id="{{label + translations[i].id}}" class="form-control" type="text"
+                    [(ngModel)]="translations[i].translatedText" name="{{label + translations[i].id}}" attr.name="{{label + translations[i].id}}"
+                    pattern="{{pattern}}" attr.pattern-error-message="{{patternErrMsg}}" alphabetical="{{(alphabetical == '' || alphabetical == 'true') ? true : false}}"
+                    attr.alphabetical="{{(alphabetical == '' || alphabetical == 'true') ? true : false}}" alphanumeric="{{(alphanumeric == '' || alphanumeric == 'true') ? true : false}}"
+                    attr.alphanumeric="{{(alphanumeric == '' || alphanumeric == 'true') ? true : false}}" maxlength="{{maxlength}}"
+                    required="{{(required == '' || required == 'true') ? true : false}}" (input)="onInputChange($event.target.value)"></textarea>
+
+                <validation-messages [formCtrl]="input"></validation-messages>
+
+            </div>
+        </div>
+    </div>
+</form>

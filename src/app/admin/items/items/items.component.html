@@ -1,0 +1,354 @@
+<div [@routerTransition]>
+    <div class="kt-content kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor">
+        <div class="kt-subheader kt-grid__item">
+            <div [class]="containerClass">
+                <div class="kt-subheader__main">
+                    <h3 class="mkt-subheader__title">
+                        <span>{{ l("Items") }}</span>
+                    </h3>
+                    <span class="kt-subheader__separator kt-subheader__separator--v"></span>
+
+                    <span class="kt-subheader__desc">
+                        {{ l("ItemsHeaderInfo") }}
+                    </span>
+                </div>
+                <div class="kt-subheader__toolbar">
+                    <div class="kt-subheader__wrapper">
+                        <button (click)="exportToExcel()" *ngIf="isGranted('Pages.Administration.Items.Export')"
+                            [disabled]="!primengTableHelper || !primengTableHelper.records ||  primengTableHelper.records.length == 0"
+                            class="btn btn-outline-success">
+                            {{ l("ExportToExcel") }}
+                        </button>
+                        <button *ngIf="isGranted('Pages.Administration.Items.Manage')" (click)="createItem()"
+                            class="btn btn-primary">
+                            <i class="fa fa-plus"></i> {{ l("CreateNewItem") }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div [class]="containerClass + ' kt-grid__item kt-grid__item--fluid'">
+        <div class="kt-portlet kt-portlet--mobile">
+            <div class="kt-portlet__body">
+                <form class="kt-form" autocomplete="off">
+                    <div class="m-form m-form--label-align-right">
+                        <div class="row align-items-center m--margin-bottom-10">
+                            <div class="col-xl-12">
+                                <div class="form-group m-form__group align-items-center">
+                                    <div class="input-group">
+                                        <input [(ngModel)]="filterText" name="filterText" autoFocus
+                                            class="form-control m-input" [placeholder]="l('SearchWithThreeDot')"
+                                            type="text" minlength="0" maxlength="3" />
+                                        <span class="input-group-btn">
+                                            <button (click)="getAllItems()" class="btn btn-primary" type="submit">
+                                                <i class="flaticon-search-1"></i>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row m--margin-bottom-10" [hidden]="!advancedFiltersAreShown">
+                            <div class="col-md-12">
+                                <div class="m-separator m-separator--dashed"></div>
+                            </div>
+
+                            <!-- Classes -->
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="Classes">{{ l("ItemClass") }}</label>
+                                    <p-autoComplete [(ngModel)]="classes" [suggestions]="filteredClasses"
+                                        (completeMethod)="filterClasses($event)" field="name"
+                                        placeholder="{{ l('ItemClass') }}" [minLength]="searchMinLength"
+                                        name="ClassMultiSelectInput" id="ClassMultiSelectInput" [multiple]="true"
+                                        styleClass="width-percent-100" [forceSelection]="true">
+                                    </p-autoComplete>
+                                </div>
+                            </div>
+
+                            <!-- Category -->
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="Category">{{ l("Category") }}</label>
+                                    <p-autoComplete [(ngModel)]="categories" [suggestions]="filteredCategories"
+                                        (completeMethod)="filterCategories($event)" field="name"
+                                        placeholder="{{ l('Category') }}" [minLength]="searchMinLength"
+                                        name="CategoryMultiSelectInput" id="CategoryMultiSelectInput" [multiple]="true"
+                                        styleClass="width-percent-100" [forceSelection]="true">
+                                    </p-autoComplete>
+                                </div>
+                            </div>
+
+                            <!-- SubCategories -->
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="SubCategory">{{ l("SubCategory") }}</label>
+                                    <p-autoComplete [(ngModel)]="subCategories" [suggestions]="filteredSubCategories"
+                                        (completeMethod)="filterSubCategories($event)" field="name"
+                                        placeholder="{{ l('SubCategory') }}" [minLength]="searchMinLength"
+                                        name="SubCategoryMultiSelectInput" id="SubCategoryMultiSelectInput"
+                                        [multiple]="true" styleClass="width-percent-100" [forceSelection]="true">
+                                    </p-autoComplete>
+                                </div>
+                            </div>
+                            <!-- ManuFactories -->
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="ManuFactory">{{ l("ManuFactory") }}</label>
+                                    <p-autoComplete [(ngModel)]="manufactories" [suggestions]="filteredManuFactories"
+                                        (completeMethod)="filterManuFactories($event)" field="name"
+                                        placeholder="{{ l('ManuFactory') }}" [minLength]="searchMinLength"
+                                        name="ManuFactoryMultiSelectInput" id="ManuFactoryMultiSelectInput"
+                                        [multiple]="true" styleClass="width-percent-100" [forceSelection]="true">
+                                    </p-autoComplete>
+                                </div>
+                            </div>
+
+
+                            <!-- Start Data -->
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label for="StartDate">{{ l("FromDate") }}</label>
+                                    <div class="input-group">
+                                        <input id="StartDatePicker" placeholder="{{ l('FromDate') }}"
+                                            style="border: gray 1px solid;background-color: transparent !important"
+                                            readonly type="text" #StartDatePicker name="StartDatePicker"
+                                            class="form-control" [(ngModel)]="startDate"
+                                            [bsConfig]="{  showWeekNumbers : false, dateInputFormat: 'YYYY/MM/DD' }" bsDatepicker
+                                            (bsValueChange)="onChangeStartDate($event)" />
+                                        <span class="input-group-btn">
+                                            <button type="button" class="btn btn-default" style="border: solid gray 1px"
+                                                (click)="resetStartDate()">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- End Date -->
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label for="DelegatedEmployees">{{ l("ToDate") }}</label>
+                                    <div class="input-group">
+                                        <input id="EndDatePicker" placeholder="{{ l('ToDate') }}"
+                                            style="border: gray 1px solid; background-color: transparent !important"
+                                            readonly type="text" #EndDatePicker name="EndDatePicker"
+                                            class="form-control" [(ngModel)]="endDate"
+                                            [bsConfig]="{ dateInputFormat: 'YYYY/MM/DD' }" bsDatepicker
+                                            (bsValueChange)="onChangeEndDate($event)" />
+                                        <span class="input-group-btn">
+                                            <button type="button" class="btn btn-default" style="border: solid gray 1px"
+                                                (click)="resetEndDate()">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <!-- Buttons -->
+                            <div class="col-md-3">
+                                <p style="margin-top: -7px;"><br /></p>
+                                <button class="btn btn-primary" type="button" (click)="getAllItems()"><i
+                                        class="flaticon-search-1"></i>
+                                    {{ l("Search") }}</button>
+                                <span>&nbsp;&nbsp;</span>
+                                <button class="btn btn-default" type="button" (click)="resetFilters()"><i
+                                        class="flaticon-delete-1"></i>
+                                    {{ l("Reset") }}</button>
+                            </div>
+                        </div>
+
+                        <div class="row margin-bottom-10">
+                            <div class="col-sm-12">
+                                <span class="clickable-item text-muted" *ngIf="!advancedFiltersAreShown"
+                                    (click)="advancedFiltersAreShown = !advancedFiltersAreShown"><i
+                                        class="fa fa-angle-down"></i>
+                                    {{ l("ShowAdvancedFilters") }}</span>
+                                <span class="clickable-item text-muted" *ngIf="advancedFiltersAreShown"
+                                    (click)="advancedFiltersAreShown = !advancedFiltersAreShown"><i
+                                        class="fa fa-angle-up"></i>
+                                    {{ l("HideAdvancedFilters") }}</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+
+                <div class="row align-items-center">
+                    <!--<Primeng-Datatable-Start>-->
+                    <div class="primeng-datatable-container" [busyIf]="primengTableHelper.isLoading">
+                        <p-table #dataTable (onLazyLoad)="getAllItems($event)" [value]="primengTableHelper.records"
+                            rows="{{ primengTableHelper.defaultRecordsCountPerPage }}" [paginator]="false" [lazy]="true"
+                            [scrollable]="true" ScrollWidth="100%" [responsive]="primengTableHelper.isResponsive"
+                            [resizableColumns]="primengTableHelper.resizableColumns">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th style="width: 70px"
+                                        [hidden]="!isGrantedAny('Pages.Administration.Items.Manage')">
+                                        {{ l("Actions") }}
+                                    </th>
+                                    <th style="width: 100px" pSortableColumn="itemNumber">
+                                        <p-sortIcon field="itemNumber"></p-sortIcon>
+                                        {{ l("ItemNumber") }}
+                                    </th>
+
+                                    <th style="width: 100px" pSortableColumn="barCode">
+                                        <p-sortIcon field="barCode"></p-sortIcon>
+                                        {{ l("BarCode") }}
+                                    </th>
+
+                                    <th style="width: 150px">
+                                        {{ l("NameAr") }}
+                                    </th>
+                                    <th style="width: 150px">
+                                        {{ l("NameEn") }}
+                                    </th>
+                                    <th style="width: 150px" *ngIf="!appSession.tenantId">
+                                        {{ l("ItemClass") }}
+                                    </th>
+                                    <th style="width: 150px" *ngIf="!appSession.tenantId">
+                                        {{ l("Category") }}
+                                    </th>
+                                    <th style="width: 150px" *ngIf="!appSession.tenantId">
+                                        {{ l("SubCategory") }}
+                                    </th>
+                                    <th style="width: 150px">
+                                        {{ l("ManuFactory") }}
+                                    </th>
+                                    <th style="width: 150px">
+                                        {{ l("Description") }}
+                                    </th>
+                                    <th style="width: 150px" pSortableColumn="createdOn">
+                                        {{ l("CreatedOn") }}
+                                        <p-sortIcon field="createdOn"></p-sortIcon>
+                                    </th>
+                                    <th style="width: 100px">
+                                        {{ l("IsInsurance") }}
+                                    </th>
+                                    <th style="width: 100px" pSortableColumn="IsActive">
+                                        {{ l("IsActive") }}
+                                        <p-sortIcon field="IsActive"></p-sortIcon>
+                                    </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-record="$implicit">
+                                <tr>
+                                    <td style="width: 70px"
+                                        [hidden]="!isGrantedAny('Pages.Administration.Items.Manage')">
+                                        <div class="btn-group dropdown" dropdown container="body">
+                                            <button class="dropdown-toggle btn btn-sm btn-primary" dropdownToggle>
+                                                <i class="fa fa-cog"></i><span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu" *dropdownMenu>
+                                                <li>
+                                                    <a href="javascript:;"
+                                                        (click)="itemBarCode.show(record.id)">{{ l("BarCode") }}</a>
+                                                </li>
+                                                <li>
+                                                    <a href="javascript:;"
+                                                        (click)="itemPrice.show(record.id)">{{ l("ItemPrice") }}</a>
+                                                </li>
+                                                <li>
+                                                    <a href="javascript:;"
+                                                        (click)="viewItem(record.id)">{{ l("View") }}</a>
+                                                </li>
+                                                <li>
+                                                    <a href="javascript:;"
+                                                        (click)="editItem(record.id)">{{l('Edit')}}</a>
+                                                </li>
+                                                <li>
+                                                    <a href="javascript:;"
+                                                        (click)="deleteItem(record)">{{l('Delete')}}</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                    <td style="width:100px">
+                                        <span class="ui-column-title"> {{ l("ItemNumber") }}</span>
+                                        {{ record.itemNumber }}
+                                    </td>
+                                    <td style="width:100px">
+                                        <span class="ui-column-title"> {{ l("BarCode") }}</span>
+                                        {{ record.barCode }}
+                                    </td>
+
+                                    <td style="width:150px">
+                                        <span class="ui-column-title"> {{ l("NameAr") }}</span>
+                                        {{ record.nameAr }}
+                                    </td>
+                                    <td style="width:150px">
+                                        <span class="ui-column-title"> {{ l("NameEn") }}</span>
+                                        {{ record.nameEn }}
+                                    </td>
+                                    <td style="width:150px" *ngIf="!appSession.tenantId">
+                                        <span class="ui-column-title"> {{ l("ItemClass") }}</span>
+                                        {{ record.itemClassName }}
+                                    </td>
+                                    <td style="width:150px" *ngIf="!appSession.tenantId">
+                                        <span class="ui-column-title"> {{ l("Category") }}</span>
+                                        {{ record.categoryName }}
+                                    </td>
+                                    <td style="width:150px" *ngIf="!appSession.tenantId">
+                                        <span class="ui-column-title"> {{ l("SubCategory") }}</span>
+                                        {{ record.subCategoryName }}
+                                    </td>
+                                    <td style="width:150px">
+                                        <span class="ui-column-title"> {{ l("ManuFactory") }}</span>
+                                        {{ record.ManuFactoryName }}
+                                    </td>
+                                    <td style="width:150px">
+                                        <span class="ui-column-title"> {{ l("Description") }}</span>
+                                        {{ record.description }}
+                                    </td>
+                                    <td style="width:150px">
+                                        <span class="ui-column-title"> {{ l("CreatedOn") }}</span>
+                                        {{ record.createdOn | momentFormat :'YYYY/MM/DD hh:mm a' }}
+                                    </td>
+                                    <td style="width:100px">
+                                        <span class="ui-column-title"> {{ l("IsInsurance") }}</span>
+
+                                        <span *ngIf="record.isInsurance"
+                                            class="kt-badge kt-badge--success kt-badge--inline">{{ l("Yes") }}</span>
+                                        <span *ngIf="!record.isInsurance"
+                                            class="kt-badge kt-badge--dark kt-badge--inline">{{ l("No") }}</span>
+                                    </td>
+                                    <td style="width:100px">
+                                        <span class="ui-column-title"> {{ l("IsActive") }}</span>
+
+                                        <span *ngIf="record.isActive"
+                                            class="kt-badge kt-badge--success kt-badge--inline">{{ l("Yes") }}</span>
+                                        <span *ngIf="!record.isActive"
+                                            class="kt-badge kt-badge--dark kt-badge--inline">{{ l("No") }}</span>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                        <div class="primeng-no-data" *ngIf="primengTableHelper.totalRecordsCount == 0">
+                            {{ l("NoData") }}
+                        </div>
+                        <div class="primeng-paging-container">
+                            <p-paginator rows="{{ primengTableHelper.defaultRecordsCountPerPage }}" #paginator
+                                (onPageChange)="getAllItems($event)"
+                                [totalRecords]="primengTableHelper.totalRecordsCount"
+                                [rowsPerPageOptions]="primengTableHelper.predefinedRecordsCountPerPage">
+                            </p-paginator>
+                            <span class="total-records-count">
+                                {{ l("TotalRecordsCount", primengTableHelper.totalRecordsCount) }}
+                            </span>
+                        </div>
+                    </div>
+                    <!--<Primeng-Datatable-End>-->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <item-bar-code #itemBarCode (modalSave)="getAllItems()"></item-bar-code>
+    <item-price #itemPrice (modalSave)="getAllItems()"></item-price>
+    
+</div>

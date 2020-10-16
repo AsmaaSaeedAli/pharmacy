@@ -1,0 +1,66 @@
+<div bsModal #createOrEditModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="createOrEditModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #itempriceForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="itemprice.id">{{l("EditItemPrice")}}</span>
+                        <span *ngIf="!itemprice.id">{{l("CreateNewItemPrice")}}</span>
+                    </h4>
+                    <button type="button" class="close" (click)="close()" aria-label="Close" [disabled]="saving">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-4 form-group">
+                            <label for="ItemPrice_Price">{{l("Price")}}</label>
+                            <input type="number" id="ItemPrice_Price" class="form-control" [(ngModel)]="itemprice.price"
+                                name="price" />
+                        </div>
+
+                        <div class="col-4 form-group">
+                            <label for="ItemPrice_DateFrom">{{l("DateFrom")}}</label>
+                            <input type="text" #SampleDatePicker id="ItemPrice_DateFrom" class="form-control"
+                               [(ngModel)]="itemprice.dateFrom._d" name="dateFrom" [bsConfig]="{
+                                        showWeekNumbers : false
+                                    }" bsDatepicker required />
+                        </div>
+                        <div class="col-4 form-group" *ngIf="itemprice.id">
+                            <label for="ItemPrice_DateTo">{{l("DateTo")}}</label>
+                            <input type="text" #SampleDatePicker id="ItemPrice_DateTo" class="form-control"
+                                *ngIf="itemprice.dateTo" [(ngModel)]="itemprice.dateTo._d" name="dateTo" [bsConfig]="{
+                                    showWeekNumbers : false
+                                }" bsDatepicker disabled />
+                        </div>
+                        <div class="col-4 form-group">
+                            <label for="ItemPrice_Discount">{{l("Discount")}}</label>
+                            <input type="number" id="ItemPrice_Discount" class="form-control"
+                                [(ngModel)]="itemprice.discount" name="discount" [value]="0" min="0" max="100" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="ItemPrice_IsActive" class="kt-checkbox">
+                                <input type="checkbox" id="ItemPrice_IsActive" [(ngModel)]="itemprice.isActive"
+                                    name="IsActive" />
+                                {{l("IsActive")}}
+                                <span></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-default"
+                        (click)="close()">{{l("Cancel")}}</button>
+                    <span>&nbsp;&nbsp;</span>
+                    <button type="submit" class="btn btn-primary" [disabled]="!itempriceForm.form.valid"
+                        [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i>
+                        <span> {{l("Save")}} </span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>

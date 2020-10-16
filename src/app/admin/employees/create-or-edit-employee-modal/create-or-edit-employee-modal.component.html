@@ -1,0 +1,126 @@
+<div bsModal #createOrEditModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="createOrEditModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #employeeForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="employee.id">{{l("EditEmployee")}}</span>
+                        <span *ngIf="!employee.id">{{l("CreateNewEmployee")}}</span>
+                    </h4>
+                    <button type="button" class="close" (click)="close()" aria-label="Close" [disabled]="saving">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-6 form-group">
+                            <label for="Employee_Code">{{l("Code")}}</label>
+                            <input type="text" id="Employee_Code" class="form-control" [(ngModel)]="employee.code"
+                                name="Code" />
+                        </div>
+                        <div class="col-6 form-group">
+                            <label for="Employee_NationalId" class="required">{{l("NationalId")}}</label>
+                            <input type="number" required id="Employee_Code" class="form-control"
+                                [(ngModel)]="employee.nationalId" name="NationalId" />
+                        </div>
+                        <div class="col-12 form-group">
+                            <localized-text #localizedName label="Name" [(json)]="employee.fullName" required
+                                [inlineForm]="true"></localized-text>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="col-6 form-group">
+                            <label for="Employee_Email" class="required">{{l("Email")}}</label>
+                            <input class="form-control" type="email" name="Email" id="genderId" required
+                                [(ngModel)]="employee.email" />
+                        </div>
+
+                        <!-- PhoneNumber -->
+                        <div class="col-6 form-group">
+                            <label for="Employee_PhoneNumber">{{l("PhoneNumber")}}</label>
+                            <input class="form-control" type="tel" name="PhoneNumber" id="PhoneNumber"
+                                [(ngModel)]="employee.phoneNumber" />
+                        </div>
+                        <div class="col-6 form-group">
+                            <label for="Employee_Gender" class="required">{{l("Gender")}}</label>
+                            <select class="form-control" name="genderId" id="genderId" required
+                                [(ngModel)]="employee.genderId">
+                                <option [value]="null">{{l('PleaseSelect')}}</option>
+                                <option *ngFor="let c of genders" [value]="c.value">{{c.name}}</option>
+                            </select>
+                        </div>
+                        <div class="col-6 form-group">
+                            <label for="Employee_Nationality" class="required">{{l("Nationality")}}</label>
+                            <select class="form-control" name="nationalityId" id="nationalityId" required
+                                [(ngModel)]="employee.nationalityId">
+                                <option [value]="null">{{l('PleaseSelect')}}</option>
+                                <option *ngFor="let c of nationalities" [value]="c.value">{{c.name}}</option>
+                            </select>
+                        </div>
+
+                        <div class="col-6 form-group">
+                            <label for="Employee_Branch">{{l("Branch")}}</label>
+                            <select class="form-control" name="branchId" id="branchId" required
+                                [(ngModel)]="employee.branchId">
+                                <option [value]="null">{{l('PleaseSelect')}}</option>
+                                <option *ngFor="let c of branches" [value]="c.value">{{c.name}}</option>
+                            </select>
+                        </div>
+
+                        <div class="col-6 form-group">
+                            <label for="Employee_Branch">{{l("Job")}}</label>
+                            <select class="form-control" name="jobId" id="jobId" [(ngModel)]="employee.jobId">
+                                <option [value]="null">{{l('PleaseSelect')}}</option>
+                                <option *ngFor="let c of jobs" [value]="c.value">{{c.name}}</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Address -->
+                        <div class="col-6 form-group">
+                            <label for="Employee_Address">{{l("Address")}}</label>
+                            <textarea class="form-control" name="Address" id="Address" [(ngModel)]="employee.address"></textarea>
+                        </div>
+
+                        <div class="col-6 form-group" *ngIf="!employee.id">
+                            <label for="Employee_CreateUser">{{l("CreateUser")}}</label>
+                            <div>
+                                <span class="kt-switch kt-switch--icon-check">
+                                    <label>
+                                        <input type="checkbox" name="employee_hasUser" value="false"
+                                            [(ngModel)]="employee.hasUser">
+                                        <span></span>
+                                    </label>
+                                </span>
+
+                                <div class="help-block">{{l("ThisCheckToCreateUserForThisEmployee")}}</div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+
+
+                    <div class="form-group">
+                        <label for="Employee_IsActive" class="kt-checkbox">
+                            <input type="checkbox" id="Employee_IsActive" [(ngModel)]="employee.isActive"
+                                name="IsActive" />
+                            {{l("IsActive")}}
+                            <span></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-default"
+                        (click)="close()">{{l("Cancel")}}</button>
+                    <span>&nbsp;&nbsp;</span>
+                    <button type="submit" class="btn btn-primary" [disabled]="!employeeForm.form.valid"
+                        [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i>
+                        <span> {{l("Save")}} </span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>

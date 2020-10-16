@@ -1,0 +1,76 @@
+<div bsModal #createOrEditModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="createOrEditModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #branchForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="branch.id">{{l("EditBranch")}}</span>
+                        <span *ngIf="!branch.id">{{l("CreateNewBranch")}}</span>
+                    </h4>
+                    <button type="button" class="close" (click)="close()" aria-label="Close" [disabled]="saving">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-6 form-group">
+                            <label for="Branch_Code">{{l("Code")}}</label>
+                            <input type="text" id="Branch_Code" class="form-control" [(ngModel)]="branch.code"
+                                name="Code" />
+                        </div>
+                        <div class="col-6 form-group">
+
+                            <label for="Branch_BranchType" class="required">{{l("BranchType")}}</label>
+                            <select class="form-control" name="branchTypeId" id="branchTypeId" required [(ngModel)]="branch.branchTypeId">
+                                <option [value]="null">{{l('PleaseSelect')}}</option>
+                                <option *ngFor="let b of branchTypes" [value]="b.value">{{b.name}}</option>
+                            </select>
+                        </div>
+                        <div class="col-12 form-group">
+                            <localized-text #localizedName label="Name" [(json)]="branch.name" required [inlineForm]="true">
+                            </localized-text>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label for="Branch_City" class="required">{{l("City")}}</label>
+                            <select class="form-control" name="cityId" id="cityId" required [(ngModel)]="branch.cityId">
+                                <option [value]="null">{{l('PleaseSelect')}}</option>
+                                <option *ngFor="let c of cities" [value]="c.value">{{c.name}}</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6 form-group">
+                            <label for="Branch_PhoneNumber">{{l("PhoneNumber")}}</label>
+                            <input type="number" id="Branch_PhoneNumber" class="form-control" [(ngModel)]="branch.phoneNumber"
+                                name="PhoneNumber" />
+                        </div>
+
+                        <div class="col-md-6 form-group">
+                            <label for="Branch_Address">{{l("Address")}}</label>
+                            <textarea type="text" id="address" class="form-control" [(ngModel)]="branch.address"
+                                name="Address" ></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="Branch_IsActive" class="kt-checkbox">
+                                <input type="checkbox" id="Branch_IsActive" [(ngModel)]="branch.isActive" name="IsActive" />
+                                {{l("IsActive")}}
+                                <span></span>
+                            </label>
+                        </div>
+
+                    </div>
+                  
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-default"
+                        (click)="close()">{{l("Cancel")}}</button>
+                    <span>&nbsp;&nbsp;</span>
+                    <button type="submit" class="btn btn-primary" [disabled]="!branchForm.form.valid"
+                        [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i>
+                        <span> {{l("Save")}} </span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>

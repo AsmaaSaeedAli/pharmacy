@@ -1,0 +1,150 @@
+<div [@routerTransition]>
+    <form *ngIf="active" #itemForm="ngForm" novalidate autocomplete="off">
+        <div class="kt-content kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor">
+            <div class="kt-subheader kt-grid__item">
+                <div [class]="containerClass">
+                    <div class="kt-subheader__main">
+                        <h3 class="mkt-subheader__title">
+                            <span>{{ l("CreateNewItem") }}</span>
+                        </h3>
+                    </div>
+                    <div class="kt-subheader__toolbar">
+                        <div class="kt-subheader__wrapper">
+                            <button (click)="close()" [disabled]="saving" class="btn btn-outline-danger">
+                                {{ l("Close") }}
+                            </button>
+                            <button *ngIf="isGranted('Pages.Administration.Items.Manage')" (click)="confirmSave()"
+                                class="btn btn-primary" [buttonBusy]="saving" [disabled]="!itemForm.valid">
+                                <i class="fa fa-plus"></i> {{ l("Save") }}
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div [class]="containerClass + ' kt-grid__item kt-grid__item--fluid'">
+            <div class="kt-portlet kt-portlet--mobile">
+                <div class="kt-portlet__body">
+                    <div class="row align-items-center">
+
+                            <div class="col-6 form-group">
+                                <label for="Item_itemNumber">{{l("ItemNumber")}}</label>
+                                <input type="text" id="Item_itemNumber" class="form-control" [(ngModel)]="item.itemNumber"
+                                    name="itemNumber" />
+                            </div>
+                            <div class="col-6 form-group">
+                                <label for="Item_marketId" class="required">{{l("Market")}}</label>
+                                <select class="form-control" name="marketId" id="marketId" required
+                                    [(ngModel)]="item.marketId">
+                                    <option [value]="null">{{l('PleaseSelect')}}</option>
+                                    <option *ngFor="let m of markets" [value]="m.value">{{m.name}}</option>
+                                </select>
+                            </div>
+                            <div class="col-6 form-group">
+                                <label for="Item_Category" class="required">{{l("Category")}}</label>
+                                <select class="form-control" name="categoryId" id="categoryId" required
+                                    [(ngModel)]="item.categoryId">
+                                    <option [value]="null">{{l('PleaseSelect')}}</option>
+                                    <option *ngFor="let c of categories" [value]="c.value">{{c.name}}</option>
+                                </select>
+                            </div>
+
+                            <div class="col-6 form-group">
+                                <label for="Item_ItemClass" class="required">{{l("ItemClass")}}</label>
+                                <select class="form-control" name="itemClassId" id="itemClassId" required
+                                    [(ngModel)]="item.itemClassId">
+                                    <option [value]="null">{{l('PleaseSelect')}}</option>
+                                    <option *ngFor="let i of itemClasses" [value]="i.value">{{i.name}}</option>
+                                </select>
+                            </div>
+                            <div class="col-6 form-group">
+                                <label for="Item_SubCategory" class="required">{{l("SubCategory")}}</label>
+                                <select class="form-control" name="subCategoryId" id="subCategoryId" required
+                                    [(ngModel)]="item.subCategoryId">
+                                    <option [value]="null">{{l('PleaseSelect')}}</option>
+                                    <option *ngFor="let s of subCategories" [value]="s.value">{{s.name}}</option>
+                                </select>
+                            </div>
+                            
+                            <div class="col-md-6 form-group">
+                                <label for="Item_CorporateFavorite" >{{l("CorporateFavorite")}}</label>
+                                <select class="form-control" name="corporateFavoriteId" id="corporateFavoriteId" 
+                                    [(ngModel)]="item.corporateFavoriteId">
+                                    <option [value]="null">{{l('PleaseSelect')}}</option>
+                                    <option *ngFor="let c of corporates" [value]="c.value">{{c.name}}</option>
+                                </select>
+                            </div>
+                            <div class="col-12 form-group">
+                                <localized-text #localizedName label="Name" [(json)]="item.name" required
+                                    [inlineForm]="true">
+                                </localized-text>
+                            </div>
+                            <div class="col-12 form-group">
+                                <localized-text-area #localizedDescription label="Description" [(json)]="item.description"
+                                    [inlineForm]="true">
+                                </localized-text-area>
+                            </div>
+                            
+                        </div>
+                     <div class="col-md-6 form-group">
+                        <label for="Item_ManuFactory" class="required">{{l("ManuFactory")}}</label>
+                        <select class="form-control" name="manufactoryId" id="manufactoryId" required
+                            [(ngModel)]="item.manuFactoryId">
+                            <option [value]="null">{{l('PleaseSelect')}}</option>
+                            <option *ngFor="let s of manufactories" [value]="s.value">{{s.name}}</option>
+                        </select>
+                    </div>
+                        <div class="row align-items-center">
+                            <div class="col-6 form-group">
+                                <label for="Item_isInsurance">{{l("IsInsurance")}}</label>
+                                <div>
+                                    <span class="kt-switch kt-switch--icon-check">
+                                        <label>
+                                            <input type="checkbox" name="item_isInsurance" value="false"
+                                                [(ngModel)]="item.isInsurance">
+                                            <span></span>
+                                        </label>
+                                    </span>
+                                </div>
+                            </div>                    
+                            <div class="col-6 form-group">
+                                <label for="Item_IsActive">{{l("IsActive")}}</label>
+                                <div>
+                                    <span class="kt-switch kt-switch--icon-check">
+                                        <label>
+                                            <input type="checkbox" name="item_isActive" value="false"
+                                                [(ngModel)]="item.isActive">
+                                            <span></span>
+                                        </label>
+                                    </span>
+                                </div>
+                            </div>
+
+                        <div class="col-6 form-group">
+                            <label for="Item_HasVat">{{l("HasVat")}}</label>
+                            <div>
+                                <span class="kt-switch kt-switch--icon-check">
+                                    <label>
+                                        <input type="checkbox" name="item_hasVat" value="false"
+                                            [(ngModel)]="item.hasVat">
+                                        <span></span>
+                                    </label>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-6 form-group">
+                            <label for="Item_vat">{{l("Vat")}}</label>
+                            <input type="number" id="Item_vat" class="form-control"
+                                [disabled]="!isGranted('Pages.Administration.Items.ChangeVat')" [(ngModel)]="item.vat"
+                                name="vat" />
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </form>
+</div>

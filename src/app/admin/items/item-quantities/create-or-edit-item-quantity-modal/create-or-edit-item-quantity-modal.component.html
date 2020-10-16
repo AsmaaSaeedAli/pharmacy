@@ -1,0 +1,80 @@
+<div bsModal #createOrEditModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="createOrEditModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #itemquantityForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="itemquantity.id">{{l("EditItemQuantity")}}</span>
+                        <span *ngIf="!itemquantity.id">{{l("CreateNewItemQuantity")}}</span>
+                    </h4>
+                    <button type="button" class="close" (click)="close()" aria-label="Close" [disabled]="saving">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-6 form-group">
+                            <label for="ItemQuantity_Quantity" class="required">{{l("Quantity")}}</label>
+                            <input type="number" id="ItemQuantity_Quantity" class="form-control"
+                                [(ngModel)]="itemquantity.quantity" name="quantity" required/>
+                        </div>
+
+                        <div class="col-6 form-group">
+                            <label for="ItemQuantity_Item" class="required">{{l("Item")}}</label>
+                            <select class="form-control"  name="itemid" id= "itemid"  required 
+                               [(ngModel)]="itemid"  (change)="changeitems($event)" >
+                                <option [value]="null">{{l('PleaseSelect')}}</option>
+                                <option *ngFor="let p of items" [value]="p.value">{{p.name}}</option>
+                            </select>
+                        </div>
+
+                        <div class="col-6 form-group">
+                            <label for="ItemQuantity_ItemPrice" class="required">{{l("ItemPrice")}}</label>
+                            <select class="form-control" name="itemPriceId" id="itemPriceId" required
+                                [(ngModel)]="itemquantity.itemPriceId">
+                                <option [value]="null">{{l('PleaseSelect')}}</option>
+                                <option *ngFor="let p of itemprices" [value]="p.value">{{p.name}}</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6 form-group">
+                            <label for="ItemQuantity_Branch" class="required">{{l("Branch")}}</label>
+                            <select class="form-control" name="branchId" id="branchId" required
+                                [(ngModel)]="itemquantity.branchId">
+                                <option [value]="null">{{l('PleaseSelect')}}</option>
+                                <option *ngFor="let b of branches" [value]="b.value">{{b.name}}</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6 form-group">
+                            <label for="ItemQuantity_Unit" class="required">{{l("Unit")}}</label>
+                            <select class="form-control" name="unitId" id="unitId" required
+                                [(ngModel)]="itemquantity.unitId">
+                                <option [value]="null">{{l('PleaseSelect')}}</option>
+                                <option *ngFor="let u of units" [value]="u.value">{{u.name}}</option>
+                            </select>
+                        </div>
+                        <div class="col-6 form-group">
+                            <label for="ItemQuantity_QuantityLimit" class="required">{{l("QuantityLimit")}}</label>
+                            <input type="number" id="ItemQuantity_QuantityLimit" class="form-control"
+                                [(ngModel)]="itemquantity.quantityLimit" name="quantityLimit" min="0" max="itemquantity.quantity" required/>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-default"
+                        (click)="close()">{{l("Cancel")}}</button>
+                    <span>&nbsp;&nbsp;</span>
+                    <button type="submit" class="btn btn-primary"
+                        [disabled]="!itemquantityForm.form.valid" [buttonBusy]="saving"
+                        [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i>
+                        <span> {{l("Save")}} </span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>

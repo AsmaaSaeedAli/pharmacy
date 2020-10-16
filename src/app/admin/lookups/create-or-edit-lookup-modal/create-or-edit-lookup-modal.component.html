@@ -1,0 +1,51 @@
+<div bsModal #createOrEditModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="createOrEditModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #lookupForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="lookup.id">{{l("EditLookup")}}</span>
+                        <span *ngIf="!lookup.id">{{l("CreateNewLookup")}}</span>
+                    </h4>
+                    <button type="button" class="close" (click)="close()" aria-label="Close" [disabled]="saving">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <localized-text #localizedName label="Name" [(json)]="lookup.name" required></localized-text>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Lookup_Code">{{l("Code")}}</label>
+                        <input type="text" id="Lookup_Code" class="form-control" [(ngModel)]="lookup.code"
+                            name="Code" />
+                    </div>
+                    <div class="form-group">
+                        <label for="Lookup_Description">{{l("Description")}}</label>
+                        <textarea type="text" id="Lookup_Description" class="form-control" [(ngModel)]="lookup.description"
+                            name="Description" ></textarea>
+                    </div>
+
+                    <div class="form-group">
+                            <label for="Lookup_IsActive" class="kt-checkbox">
+                                <input type="checkbox" id="Lookup_IsActive" [(ngModel)]="lookup.isActive" name="IsActive" />
+                                {{l("IsActive")}}
+                                <span></span>
+                            </label>
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-default"
+                        (click)="close()">{{l("Cancel")}}</button>
+                        <span>&nbsp;&nbsp;</span>
+                    <button type="submit" class="btn btn-primary" [disabled]="!lookupForm.form.valid"
+                        [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i>
+                         <span> {{l("Save")}} </span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>

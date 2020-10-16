@@ -1,0 +1,66 @@
+<div bsModal #createOrEditModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="createOrEditModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #manufactoryForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="manufactory.id">{{l("EditManuFactory")}}</span>
+                        <span *ngIf="!manufactory.id">{{l("CreateNewManuFactory")}}</span>
+                    </h4>
+                    <button type="button" class="close" (click)="close()" aria-label="Close" [disabled]="saving">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        
+                        <div class="col-12 form-group">
+                            <localized-text #localizedName label="Name" [(json)]="manufactory.name" required [inlineForm]="true">
+                            </localized-text>
+                        </div>
+
+                        <div class="col-md-6 form-group">
+                            <label for="ManuFactory_ContactName">{{l("ContactName")}}</label>
+                            <input type="test" id="ManuFactory_ContactName" class="form-control" [(ngModel)]="manufactory.contactName"
+                                name="ContactName" />
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label for="ManuFactory_ContactPhone" class="required">{{l("ContactPhone")}}</label>
+                            <input type="test" id="ManuFactory_ContactPhone" class="form-control" required [(ngModel)]="manufactory.contactPhone"
+                                name="ContactPhone" />
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label for="ManuFactory_ContactEmail" class="required">{{l("ContactEmail")}}</label>
+                            <input type="test" id="ManuFactory_ContactEmail" class="form-control" required [(ngModel)]="manufactory.contactEmail"
+                                name="ContactEmail" />
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label for="ManuFactory_Notes">{{l("Notes")}}</label>
+                            <textarea type="test" id="ManuFactory_Notes" class="form-control" name="Notes"  [(ngModel)]="manufactory.notes"></textarea>
+                               
+                        </div>
+                        <div class="form-group">
+                            <label for="ManuFactory_IsActive" class="kt-checkbox">
+                                <input type="checkbox" id="ManuFactory_IsActive" [(ngModel)]="manufactory.isActive" name="IsActive" />
+                                {{l("IsActive")}}
+                                <span></span>
+                            </label>
+                        </div>
+
+                    </div>
+                  
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-default"
+                        (click)="close()">{{l("Cancel")}}</button>
+                    <span>&nbsp;&nbsp;</span>
+                    <button type="submit" class="btn btn-primary" [disabled]="!manufactoryForm.form.valid"
+                        [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i>
+                        <span> {{l("Save")}} </span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>

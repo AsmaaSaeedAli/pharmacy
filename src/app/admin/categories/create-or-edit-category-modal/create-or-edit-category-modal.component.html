@@ -1,0 +1,62 @@
+<div bsModal #createOrEditModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="createOrEditModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #categoryForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="category.id">{{l("EditCategory")}}</span>
+                        <span *ngIf="!category.id">{{l("CreateNewCategory")}}</span>
+                    </h4>
+                    <button type="button" class="close" (click)="close()" aria-label="Close" [disabled]="saving">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-6 form-group">
+                            <label for="Category_Code">{{l("Code")}}</label>
+                            <input type="text" id="Category_Code" class="form-control" [(ngModel)]="category.code"
+                                name="Code" />
+                        </div>
+                       
+                        <div class="col-12 form-group">
+                            <localized-text #localizedName label="Name" [(json)]="category.name" required [inlineForm]="true">
+                            </localized-text>
+                        </div>
+
+                        <div class="col-12 form-group">
+                            <localized-text-area #localizedDescription label="Description" [(json)]="category.description"  [inlineForm]="true">
+                            </localized-text-area>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label for="Category_ItemClass" class="required">{{l("ItemClass")}}</label>
+                            <select class="form-control" name="itemClassId" id="itemClassId" required [(ngModel)]="category.itemClassId">
+                                <option [value]="null">{{l('PleaseSelect')}}</option>
+                                <option *ngFor="let i of itemClasses" [value]="i.value">{{i.name}}</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="Category_IsActive" class="kt-checkbox">
+                                <input type="checkbox" id="Category_IsActive" [(ngModel)]="category.isActive" name="IsActive" />
+                                {{l("IsActive")}}
+                                <span></span>
+                            </label>
+                        </div>
+
+                    </div>
+                  
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-default"
+                        (click)="close()">{{l("Cancel")}}</button>
+                    <span>&nbsp;&nbsp;</span>
+                    <button type="submit" class="btn btn-primary" [disabled]="!categoryForm.form.valid || !localizedName.valid()"
+                        [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i>
+                        <span> {{l("Save")}} </span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>

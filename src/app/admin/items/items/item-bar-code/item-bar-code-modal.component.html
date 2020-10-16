@@ -1,0 +1,54 @@
+<div bsModal #itemBarCodeModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="itemBarCodeModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #itemForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span>{{l("BarCode")}}</span>
+                    </h4>
+                    <button type="button" class="close" (click)="close()" aria-label="Close" [disabled]="saving">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row" *ngFor="let barCode of adminBarCode; let i = index">
+                         <div class="col-8 form-group">
+                            <input required [disabled]="appSession.tenantId" type="text" id="barCode_{{i}}" class="form-control" [(ngModel)]="barCode.name"
+                            name="barCode_{{i}}" />
+                         </div>
+                         <div class="col-4">
+                            <button type="button" *ngIf="!appSession.tenantId" (click)="deleteBarCode(i)" class="btn btn-danger"><i
+                                class="flaticon-delete-1"></i></button>
+                         </div>
+                    </div>
+
+                    <div class="row" *ngFor="let barCode of pharmacyBarCode; let i = index">
+                        <div class="col-8 form-group">
+                           <input  type="text" maxlength="3" id="pharmacyBarCode_{{i}}" class="form-control" [(ngModel)]="barCode.name"
+                           name="pharmacyBarCode_{{i}}" />
+                        </div>
+                        <div class="col-4">
+                           <button type="button" (click)="deleteBarCode(i)" class="btn btn-danger"><i
+                               class="flaticon-delete-1"></i></button>
+                        </div>
+                   </div>
+                    <div class="row" *ngIf="!appSession.tenantId">
+                        <button type="button" class="btn btn-primary" (click)="addNewBarCode(adminBarCode.length-1)">
+                            <i class="fa fa-plus"></i><span>{{l('AddNewBarCode')}}</span> </button>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-default"
+                        (click)="close()">{{l("Cancel")}}</button>
+                    <span>&nbsp;&nbsp;</span>
+                    <button type="submit" class="btn btn-primary" [disabled]="!itemForm.form.valid"
+                        [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i>
+                        <span> {{l("Save")}} </span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>

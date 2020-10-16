@@ -1,0 +1,213 @@
+<div [@routerTransition] [busyIf]="primengTableHelper.isLoading">
+    <form class="col-12" #invoiceForm="ngForm" novalidate autocomplete="off">
+        <div class="kt-content kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor">
+            <div class="kt-subheader kt-grid__item">
+                <div [class]="containerClass">
+                    <div class="kt-subheader__main">
+                        <h3 class="mkt-subheader__title">
+                            <span>{{ l("CreateNewInvoice") }}</span>
+                        </h3>
+                    </div>
+                    <div class="kt-subheader__toolbar">
+                        <div class="kt-subheader__wrapper">
+                            <button (click)="close()" type="button" [disabled]="saving" class="btn btn-outline-danger">
+                                {{ l("Close") }}
+                            </button>
+                            <button (click)="save()" class="btn btn-primary" [buttonBusy]="saving"
+                                [disabled]="!invoiceForm.valid">
+                                <i class="fa fa-plus"></i> {{ l("Save") }}
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div [class]="containerClass + ' kt-grid__item kt-grid__item--fluid'">
+            <div class="kt-portlet kt-portlet--mobile">
+                <div class="kt-portlet__body">
+                    <div class="row">
+                        <div class="col-4 ">
+                            <div class="form-group">
+                                <label for="InvoiceType" class="required">{{l("InvoiceType")}}</label>
+                                <select type="text" id="InvoiceType" class="form-control" required
+                                    [(ngModel)]="invoice.invoiceTypeId" name="InvoiceType">
+                                    <option *ngFor="let c of invoiceTypes" [value]="c.value">{{c.name}}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <form #searchItem="ngForm" (submit)="getItem()" novalidate autocomplete="off">
+                                    <label for="itemsearch">{{l("SearchItem")}}</label>
+                                    <div class="input-group">
+                                        <input type="text" id="itemsearch" class="form-control" name="item" [placeholder]="l('EnterItemNumberOrBarCode')"
+                                            [(ngModel)]="itemSearch" />
+    
+                                        <span class="input-group-btn">
+                                            <button type="submit" class="btn btn-primary" [disabled]="!itemSearch || itemSearch.trim() == ''">
+                                                <i class="fa fa-search"></i>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="col-4 form-group">
+                            <form #searchCustomer="ngForm" (submit)="getCustomer()" novalidate autocomplete="off">
+                                <label for="invoice_customer">{{l("SearchCustomer")}}</label>
+                                <div class="input-group">
+                                    <input type="text" id="invoice_customer" class="form-control" [placeholder]="l('EnterIdNumberOrMobileNumber')"
+                                        [(ngModel)]="customerSearch" name="customersearch" />
+                                    <span class="input-group-btn">
+                                        <button type="submit" [disabled]="!customerSearch || customerSearch.trim() == ''" class="btn btn-primary">
+                                            <i class="fa fa-search"></i>
+                                        </button>
+                                    </span>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label for="customername">{{l("CustomerName")}} : </label>
+                                <span id="customername" class="font-bold"> {{customerName}}</span>
+                            </div>
+                            <div class="form-group" *ngIf="this.customerId">
+                                <button type="button" class="btn btn-primary btn-sm" (click)="showLoyaltySales()">{{l('LoyaltySales')}}</button>
+                            </div>
+                            <div class="form-group">
+                                <label for="TotalAmount">{{l("TotalAmount")}} : </label>
+                                <span id="TotalAmount" class="font-bold"> {{getTotalAmount}}</span>
+                            </div>
+                            <div class="form-group row">
+                                <label for="Discount" class="col-3 col-form-label">{{l("Discount")}} : </label>
+                                <input type="number" class="col-5 form-control" [disabled]="!isGranted('Pages.Administration.Invoices.Discount')" min="0" max="100" id="Discount" name="Discount"
+                                    [(ngModel)]="invoice.discount" />
+                            </div>
+                            <div class="form-group">
+                                <label for="netAmount">{{l("NetAmount")}} : </label>
+                                <span id="netAmount" class="font-bold"> {{getNetTotalAmount}}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-12 align-items-center">
+                            <!--<Primeng-Datatable-Start>-->
+                            <div class="primeng-datatable-container" >
+                                <p-table #dataTable [value]="invoice.invoiceItems" [scrollable]="true">
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th style="width: 130px">
+                                                {{ l("NameEn") }}
+                                            </th>
+                                            <th style="width: 130px">
+                                                {{ l("NameAr") }}
+                                            </th>
+
+                                            <th style="width: 80px">
+                                                {{ l("ItemPrice") }}
+                                            </th>
+                                            <th style="width: 80px">
+                                                {{ l("ItemQuantity") }}
+                                            </th>
+                                            <th style="width: 130px">
+                                                {{ l("Unit") }}
+                                            </th>
+                                            <th style="width: 130px">
+                                                {{ l("Amount") }}
+                                            </th>
+                                            <th style="width: 130px">
+                                                {{ l("Vat") }}
+                                            </th>
+                                            <th style="width: 130px">
+                                                {{ l("Discount") }}
+                                            </th>
+                                            <th style="width: 130px">
+                                                {{ l("NetAmount") }}
+                                            </th>
+                                            <th style="width: 80px">
+                                                {{ l("Actions") }}
+                                            </th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-rowIndex="rowIndex" let-record="$implicit">
+                                        <tr>
+                                            <td style="width:130px">
+                                                <input type="text" readonly class="form-control"
+                                                    name="itemNameEn_{{rowIndex}}" [(ngModel)]="record.itemNameEn" />
+                                            </td>
+
+                                            <td style="width:130px">
+                                                <input type="text" readonly class="form-control"
+                                                    name="itemNameAr_{{rowIndex}}" [(ngModel)]="record.itemNameAr" />
+                                            </td>
+                                            <td style="width:80px">
+                                                <input type="number" class="form-control" name="itemPrice_{{rowIndex}}"
+                                                    [(ngModel)]="record.itemPrice" />
+                                            </td>
+                                            <td style="width:80px">
+                                                <input type="number" name="quantity_{{rowIndex}}" min="1" max="99999"
+                                                    (input)="onChangeQuantityOrDiscount(rowIndex)" [(ngModel)]="record.quantity"
+                                                    class="form-control" />
+                                            </td>
+                                            <td style="width:130px">
+                                                <select class="form-control" name="unit_{{rowIndex}}" required
+                                                    [(ngModel)]="record.unitTypeId">
+                                                    <option [ngValue]='null'>{{l('PleaseSelect')}}</option>
+                                                    <option *ngFor="let c of units" [value]="c.value">{{c.name}}
+                                                    </option>
+                                                </select>
+
+                                            </td>
+                                            <td style="width:130px">
+                                                <input type="number" name="amount_{{rowIndex}}" readonly
+                                                    [(ngModel)]="record.amount" class="form-control" />
+                                            </td>
+                                            <td style="width:130px">
+                                                <input type="number" name="vat_{{rowIndex}}" readonly
+                                                    [(ngModel)]="record.vat" class="form-control" />
+                                            </td>
+                                            <td style="width:130px">
+                                                <input type="number" max="100" min="0" [disabled]="!isGranted('Pages.Administration.Invoices.Discount')" 
+                                                (input)="onChangeQuantityOrDiscount(rowIndex)" name="discount_{{rowIndex}}" [(ngModel)]="record.discount"
+                                                    class="form-control" />
+                                            </td>
+                                            <td style="width:130px">
+                                                <input type="number" name="netAmount_{{rowIndex}}" readonly
+                                                    [(ngModel)]="record.netAmount" class="form-control" />
+                                            </td>
+
+                                            <td style="width:80px">
+                                                <button type="button" class="btn btn-danger"
+                                                    (click)="removeItem(rowIndex)"><i class="fa fa-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                                <div class="primeng-no-data"
+                                    *ngIf="!invoice ||  !invoice.invoiceItems ||invoice.invoiceItems.length == 0">
+                                    {{ l("NoData") }}
+                                </div>
+                            </div>
+                            <!--<Primeng-Datatable-End>-->
+                        </div>
+                    </div>
+                    <p><br /></p>
+                    <div class="row">
+                        <div class="col-12 form-group">
+                            <label for="Invoice_Notes">{{l("Notes")}}</label>
+                            <textarea id="Invoice_Notes" class="form-control" maxlength="500"
+                                [(ngModel)]="invoice.notes" name="notes"></textarea>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<customer-loyalty #customerLoyalty [customerId]="customerId"></customer-loyalty>

@@ -1,0 +1,82 @@
+<div bsModal #createOrEditModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="createOrEditModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    <span>{{l('ItemDetails')}}</span>
+                </h4>
+                <button type="button" class="close" (click)="close()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-6 mb-3">
+                        <h6>{{l("ItemNumber")}}</h6>
+                        <input type="text" disabled class="form-control" [value]="item.itemNumber" />
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{l("BarCode")}}</h6>
+                        <input type="text" disabled class="form-control" [value]="item.barCode" />
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{l("Name")}}</h6>
+                        <input type="text" disabled class="form-control" [value]="item.name" />
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{l("Category")}}</h6>
+                        <input type="text" disabled class="form-control" [value]="item.categoryName" />
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{l("ItemClass")}}</h6>
+                        <input type="text" disabled class="form-control" [value]="item.itemClassName" />
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{l("SubCategory")}}</h6>
+                        <input type="text" disabled class="form-control" [value]="item.subCategoryName" />
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{l("ManuFactory")}}</h6>
+                        <input type="text" disabled class="form-control" [value]="item.manuFactoryName" />
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{l("Description")}}</h6>
+                        <textarea  type="text" disabled  class="form-control" [value]="item.description" >
+                            </textarea>
+                    </div>
+                     <div class="col-6 mb-3">
+                                <h6>{{l("CorporateFavorite")}}</h6>
+                                <input type="text" disabled class="form-control" [value]="item.corporateFavoriteName" />
+                            </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{l("IsActive")}}</h6>
+                        <span *ngIf="item.isActive"
+                            class="kt-badge kt-badge--success kt-badge--inline">{{l("Yes")}}</span>
+                        <span *ngIf="!item.isActive" class="kt-badge kt-badge--dark kt-badge--inline">{{l("No")}}</span>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{l("IsInsurance")}}</h6>
+                        <span *ngIf="item.isInsurance"
+                            class="kt-badge kt-badge--success kt-badge--inline">{{l("Yes")}}</span>
+                        <span *ngIf="!item.isInsurance" class="kt-badge kt-badge--dark kt-badge--inline">{{l("No")}}</span>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{l("HasVat")}}</h6>
+                        <span *ngIf="item.hasVat"
+                            class="kt-badge kt-badge--success kt-badge--inline">{{l("Yes")}}</span>
+                        <span *ngIf="!item.hasVat" class="kt-badge kt-badge--dark kt-badge--inline">{{l("No")}}</span>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{l("Vat")}}</h6>
+                        <input type="text" disabled class="form-control" [value]="item.vat" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button [disabled]="saving" type="button" class="btn btn-primary"
+                    (click)="close()">{{l("Close")}}</button>
+            </div>
+        </div>
+    </div>
+</div>
