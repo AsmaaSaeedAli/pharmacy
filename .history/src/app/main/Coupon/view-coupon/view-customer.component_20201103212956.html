@@ -1,0 +1,136 @@
+<div [@routerTransition]>
+    <form *ngIf="active" class="col-12" #CouponForm="ngForm" novalidate autocomplete="off">
+        <div class="kt-content kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor">
+            <div class="kt-subheader kt-grid__item">
+                <div [class]="containerClass">
+                    <div class="kt-subheader__main">
+                        <h3 class="mkt-subheader__title">
+                            <span>{{ l("CouponDetails") }}</span>
+                        </h3>
+                    </div>
+                    <div class="kt-subheader__toolbar">
+                        <div class="kt-subheader__wrapper">
+                            <button (click)="close()" [disabled]="saving" class="btn btn-outline-danger">
+                                {{ l("Close") }}
+                            </button>
+                            <button *ngIf="isGranted('Pages.Administration.Coupons.Manage')" (click)="editCoupon()"
+                                class="btn btn-primary">
+                                <i class="fa fa-plus"></i> {{ l("EditCoupon") }}
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div [class]="containerClass + ' kt-grid__item kt-grid__item--fluid'">
+            <div class="kt-portlet kt-portlet--mobile">
+                <div class="kt-portlet__body">
+                    <div class="row align-items-center">
+
+                        <div class="col-4">
+                            <h5>{{l("IsActive")}}</h5>
+                            <span class="kt-switch kt-switch--icon-check">
+                                <label>
+                                    <input type="checkbox" disabled name="isActive" value="true" [(ngModel)]="Coupon.isActive">
+                                    <span></span>
+                                </label>
+                            </span>
+                        </div>
+
+                        <div class="col-4 form-group">
+                            <label for="Coupon_Code" class="required">{{l("Code")}}</label>
+                            <input type="text" id="Coupon_Code" class="form-control" [(ngModel)]="Coupon.code"
+                                name="Code" required disabled />
+                        </div>
+
+                        <div class="col-3 text-center">
+                            <img [src]="Coupon.personalPhoto" class="img-border" width="200" height=250
+                                *ngIf="Coupon.personalPhoto" />
+                            <img src="../../../assets/common/images/default-profile-picture.png" width="200" height=200
+                                *ngIf="!Coupon.personalPhoto" />
+                        </div>
+                        <div class="col-4 form-group">
+                            <label for="Coupon_FullName">{{l("FullName")}}</label>
+                            <input type="text" disabled id="Coupon_FullName" class="form-control"
+                                [(ngModel)]="Coupon.fullName" name="FullName" />
+                        </div>
+                        <div class="col-4 form-group">
+                            <label for="Coupon_DateOfBirth">{{l("DateOfBirth")}}</label>
+                            <input type="text" disabled id="Coupon_DateOfBirth" class="form-control"
+                                [value]="Coupon.dateOfBirth | momentFormat :  'DD/MM/YYYY'" name="DateOfBirth"  />
+                        </div>
+
+                        <div class="col-4 form-group">
+                            <label for="Nationality" >{{l("Nationality")}}</label>
+                            <input type="text" disabled name="Nationality" class="form-control"
+                                [(ngModel)]="Coupon.nationality" />
+                        </div>
+                        <div class="col-4 form-group">
+                            <label for="genderId" >{{l("Gender")}}</label>
+                            <input type="text" name="gender" disabled class="form-control"
+                                [(ngModel)]="Coupon.gender" />
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label for="Coupon_email">{{l("Email")}}</label>
+                                <input type="email" name="Nationality" disabled id="Coupon_email" class="form-control"
+                                    [(ngModel)]="Coupon.email" name="Email" />
+                            </div>
+                        </div>
+                        <div class="col-4 form-group">
+                            <label for="Coupon_primaryMobileNumber">{{l("PrimaryMobileNumber")}}</label>
+                            <input type="number" id="Coupon_primaryMobileNumber" disabled class="form-control"
+                                [(ngModel)]="Coupon.primaryMobileNumber" name="PrimaryMobileNumber" />
+                        </div>
+                        <div class="col-4 form-group">
+                            <label for="Coupon_SecondaryMobileNumber">{{l("SecondaryMobileNumber")}}</label>
+                            <input type="number" id="Coupon_SecondaryMobileNumber" disabled class="form-control"
+                                [(ngModel)]="Coupon.secondaryMobileNumber" name="SecondaryMobileNumber" />
+                        </div>
+
+                        <div class="col-4 form-group">
+                            <label for="MaritalStatus">{{l("MaritalStatus")}}</label>
+                            <input type="text" disabled class="form-control" name="MaritalStatus"
+                                [(ngModel)]="Coupon.maritalStatus" />
+                        </div>
+                        <div class="col-4 form-group">
+                            <label for="Coupon_NoOfDependencies">{{l("NoOfDependencies")}}</label>
+                            <input type="number" disabled id="Coupon_NoOfDependencies" class="form-control"
+                                [(ngModel)]="Coupon.noOfDependencies" name="NoOfDependencies" />
+                        </div>
+
+
+                        <div class="col-md-4 form-group">
+                            <label for="countryId">{{l("Country")}}</label>
+                            <input type="text" disabled class="form-control" name="Country"
+                                [(ngModel)]="Coupon.country" />
+                        </div>
+
+                        <div class="col-4 form-group">
+                            <label for="regionId">{{l("Region")}}</label>
+                            <input type="text" disabled class="form-control" name="Region"
+                                [(ngModel)]="Coupon.region" />
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label for="cityId">{{l("City")}}</label>
+                            <input type="text" disabled class="form-control" name="City"
+                                [(ngModel)]="Coupon.city" />
+                        </div>
+                        <div class="col-4 form-group">
+                            <label for="Coupon_Address">{{l("Address")}}</label>
+                            <textarea id="Coupon_Address" disabled class="form-control" [(ngModel)]="Coupon.address"
+                                name="Address"></textarea>
+                        </div>
+
+                        <div class="col-4 form-group">
+                            <label for="Coupon_Notes">{{l("Notes")}}</label>
+                            <textarea id="Coupon_Notes" disabled class="form-control" [(ngModel)]="Coupon.notes"
+                                name="Notes"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

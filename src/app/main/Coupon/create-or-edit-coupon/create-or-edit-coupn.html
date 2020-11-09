@@ -1,0 +1,92 @@
+<div [@routerTransition]>
+    <form *ngIf="active" class="col-12" #CouponForm="ngForm" novalidate autocomplete="off">
+        <div class="kt-content kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor">
+            <div class="kt-subheader kt-grid__item">
+                <div [class]="containerClass">
+                    <div class="kt-subheader__main">
+                        <h3 class="mkt-subheader__title">
+                            <span>{{ l("CreateNewCoupon") }}</span>
+                        </h3>
+                    </div>
+                    <div class="kt-subheader__toolbar">
+                        <div class="kt-subheader__wrapper">
+                            <button (click)="close()" [disabled]="saving" class="btn btn-outline-danger">
+                                {{ l("Close") }}
+                            </button>
+                            <button *ngIf="isGranted('Pages.Administration.Coupons.Manage')" (click)="confirmSave()"
+                                class="btn btn-primary" [buttonBusy]="saving" [disabled]="!CouponForm.valid">
+                                <i class="fa fa-plus"></i> {{ l("Save") }}
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div [class]="containerClass + ' kt-grid__item kt-grid__item--fluid'">
+            <div class="kt-portlet kt-portlet--mobile">
+                <div class="kt-portlet__body">
+                    <div class="row align-items-center">
+
+                        <div class="col-12">
+                            <h5>{{l("IsActive")}}</h5>
+                            <span class="kt-switch kt-switch--icon-check">
+                                <label>
+                                    <input type="checkbox" name="ReceiveNotifications" value="true"
+                                        [(ngModel)]="Coupon.isActive">
+                                    <span></span>
+                                </label>
+                            </span>
+                        </div>
+                       
+                          
+                        <div class="col-4 form-group">
+                            <label for="Coupon_Code">{{l("StartDate")}}</label>
+                            <input type="text" #SampleDatePicker id="Coupon_Code" class="form-control"
+                                [(ngModel)]="Coupon.Coupon_Code" name="StartDate" [bsConfig]="{
+                                    showWeekNumbers : false
+                                }" bsDatepicker />
+                        </div>
+                             
+                        <div class="col-4 form-group">
+                            <label for="CouponDiscountRate">{{l("StartDate")}}</label>
+                            <input type="text" #SampleDatePicker id="CouponDiscountRate" class="form-control"
+                                [(ngModel)]="Coupon.CouponDiscountRate" name="CouponDiscountRate" [bsConfig]="{
+                                    showWeekNumbers : false
+                                }" bsDatepicker />
+                        </div>
+                        
+                            <div class="col-4 form-group">
+                                <label for="Coupon_Start_Date">{{l("StartDate")}}</label>
+                                <input type="text" #SampleDatePicker id="Coupon_Start_Date" class="form-control"
+                                    [(ngModel)]="Coupon.StartDate" name="StartDate" [bsConfig]="{
+                                        showWeekNumbers : false
+                                    }" bsDatepicker />
+                            </div>
+                             <div class="col-4 form-group">
+                                <label for="Coupon_End_Date">{{l("EndDate")}}</label>
+                                <input type="text" #SampleDatePicker id="Coupon_End_Date" class="form-control"
+                                    [(ngModel)]="Coupon.EndDate._d" name="EndDate" [bsConfig]="{
+                                        showWeekNumbers : false
+                                    }" bsDatepicker />
+                            </div>
+                             <!-- items  -->
+                             <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="Classes">{{ l("CouponItems") }}</label>
+                                    <p-autoComplete [(ngModel)]="CouponItems" [suggestions]="filteredCouponItems"
+                                        (completeMethod)="filterCouponItems($event)" field="name"
+                                        placeholder="{{ l('CouponItems') }}" [minLength]="searchMinLength"
+                                        name="ClassMultiSelectInput" id="ClassMultiSelectInput" [multiple]="true"
+                                        styleClass="width-percent-100" [forceSelection]="true">
+                                    </p-autoComplete>
+                                </div>
+                            </div>
+
+                     
+                        </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

@@ -7,7 +7,7 @@ import { RootModule } from '../root.module';
 import { AppComponent } from './app.component';
 
 export function getRemoteServiceBaseUrl(): string {
-    return 'http://localhost:22778';
+    return 'http://localhost:22777';
 }
 
 describe('App: Pharmacy', () => {

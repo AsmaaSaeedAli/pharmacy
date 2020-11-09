@@ -1,0 +1,182 @@
+<div [@routerTransition]>
+    <form *ngIf="active" class="col-12" #CouponForm="ngForm" novalidate autocomplete="off">
+        <div class="kt-content kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor">
+            <div class="kt-subheader kt-grid__item">
+                <div [class]="containerClass">
+                    <div class="kt-subheader__main">
+                        <h3 class="mkt-subheader__title">
+                            <span>{{ l("CreateNewCoupon") }}</span>
+                        </h3>
+                    </div>
+                    <div class="kt-subheader__toolbar">
+                        <div class="kt-subheader__wrapper">
+                            <button (click)="close()" [disabled]="saving" class="btn btn-outline-danger">
+                                {{ l("Close") }}
+                            </button>
+                            <button *ngIf="isGranted('Pages.Administration.Coupons.Manage')" (click)="confirmSave()"
+                                class="btn btn-primary" [buttonBusy]="saving" [disabled]="!CouponForm.valid">
+                                <i class="fa fa-plus"></i> {{ l("Save") }}
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div [class]="containerClass + ' kt-grid__item kt-grid__item--fluid'">
+            <div class="kt-portlet kt-portlet--mobile">
+                <div class="kt-portlet__body">
+                    <div class="row align-items-center">
+
+                        <div class="col-12">
+                            <h5>{{l("IsActive")}}</h5>
+                            <span class="kt-switch kt-switch--icon-check">
+                                <label>
+                                    <input type="checkbox" name="ReceiveNotifications" value="true"
+                                        [(ngModel)]="Coupon.isActive">
+                                    <span></span>
+                                </label>
+                            </span>
+                        </div>
+                        
+                            <div class="col-4 form-group">
+                                <label for="Coupon_Code" class="required">{{l("Code")}}</label>
+                                <input type="text" id="Coupon_Code" class="form-control" [(ngModel)]="Coupon.code"
+                                    name="Code" required [disabled]="Coupon.id" />
+                            </div>
+                            <div class="col-5">
+
+                                <label for="Coupon_Image">{{l("Image")}}</label>
+                                <p-fileUpload [multiple]="false" id="DefaultFileUploadFileInput"
+                                    name="DefaultFileUploadFileInput[]" [url]="uploadUrl" accept="image/*"
+                                    maxFileSize="1000000" (onUpload)="onUpload($event)"
+                                    (onBeforeSend)="onBeforeSend($event)" [chooseLabel]="l('ChooseFile')"
+                                    [uploadLabel]="l('Upload')" [cancelLabel]="l('Cancel')">
+
+                                    <ng-template pTemplate="content">
+                                        <ul *ngIf="uploadedFiles.length">
+                                            <li *ngFor="let file of uploadedFiles">{{file.name}} - {{file.size}} bytes
+                                            </li>
+                                        </ul>
+                                    </ng-template>
+                                </p-fileUpload>
+                            </div>
+                            <div class="col-3 text-center">
+                                <img [src]="Coupon.personalPhoto" class="img-border" width="200" height=250
+                                    *ngIf="Coupon.personalPhoto" />
+                                <img src="../../../assets/common/images/default-profile-picture.png" width="200"
+                                    height=200 *ngIf="!Coupon.personalPhoto" />
+                            </div>
+                            <div class="col-8">
+                                <div class="form-group">
+                                    <localized-text #localizedName label="FullName" [(json)]="Coupon.fullName"
+                                        required [inlineForm]="true"></localized-text>
+                                </div>
+                            </div>
+                            <div class="col-4 form-group">
+                                <label for="Coupon_Code">{{l("DateOfBirth")}}</label>
+                                <input type="text" #SampleDatePicker id="Coupon_DateOfBirth" class="form-control"
+                                    [(ngModel)]="Coupon.dateOfBirth._d" name="DateOfBirth" [bsConfig]="{
+                                        showWeekNumbers : false
+                                    }" bsDatepicker />
+                            </div>
+
+                            <div class="col-4 form-group">
+                                <label for="Nationality" class="required">{{l("Nationality")}}</label>
+                                <select type="text" id="Nationality" class="form-control"
+                                    [(ngModel)]="Coupon.nationalityId" required name="Nationality">
+                                    <option [ngValue]='null'>{{l('PleaseSelect')}}</option>
+                                    <option *ngFor="let c of nationalities" [value]="c.value">{{c.name}}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="col-4 form-group">
+                                <label for="genderId" class="required">{{l("Gender")}}</label>
+                                <select type="text" id="GenderId" class="form-control" [(ngModel)]="Coupon.genderId"
+                                    required name="GenderId">
+                                    <option [ngValue]='null'>{{l('PleaseSelect')}}</option>
+                                    <option *ngFor="let c of genders" [value]="c.value">{{c.name}}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label for="Coupon_email">{{l("Email")}}</label>
+                                    <input type="email" id="Coupon_email" class="form-control"
+                                        [(ngModel)]="Coupon.email" name="Email" />
+                                </div>
+                            </div>
+                            <div class="col-4 form-group">
+                                <label for="Coupon_primaryMobileNumber"
+                                    class="required">{{l("PrimaryMobileNumber")}}</label>
+                                <input type="number" id="Coupon_primaryMobileNumber" required class="form-control"
+                                    [(ngModel)]="Coupon.primaryMobileNumber" name="PrimaryMobileNumber" />
+                            </div>
+                            <div class="col-4 form-group">
+                                <label for="Coupon_SecondaryMobileNumber">{{l("SecondaryMobileNumber")}}</label>
+                                <input type="number" id="Coupon_SecondaryMobileNumber" class="form-control"
+                                    [(ngModel)]="Coupon.secondaryMobileNumber" name="SecondaryMobileNumber" />
+                            </div>
+
+                            <div class="col-4 form-group">
+                                <label for="MaritalStatus" class="required">{{l("MaritalStatus")}}</label>
+                                <select type="text" id="MaritalStatus" class="form-control"
+                                    [(ngModel)]="Coupon.maritalStatusId" required name="MaritalStatus">
+                                    <option [ngValue]='null'>{{l('PleaseSelect')}}</option>
+                                    <option *ngFor="let c of maritalStatuses" [value]="c.value">{{c.name}}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="col-4 form-group">
+                                <label for="Coupon_NoOfDependencies">{{l("NoOfDependencies")}}</label>
+                                <input type="number" id="Coupon_NoOfDependencies" min="0" max="100"
+                                    class="form-control" [(ngModel)]="Coupon.noOfDependencies"
+                                    name="NoOfDependencies" />
+                            </div>
+
+
+                            <div class="col-md-4 form-group">
+                                <label for="countryId" class="required">{{l("Country")}}</label>
+                                <select type="text" id="countryId" class="form-control" [(ngModel)]="Coupon.countryId"
+                                    required name="countryId" (change)="onChangeCountry()">
+                                    <option [ngValue]='null'>{{l('PleaseSelect')}}</option>
+                                    <option *ngFor="let c of countries" [value]="c.value">{{c.name}}
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="col-4 form-group">
+                                <label for="regionId">{{l("Region")}}</label>
+                                <select type="text" id="regionId" class="form-control" [(ngModel)]="Coupon.regionId"
+                                    name="regionId" (change)="onChangeRegions()" [disabled]="!Coupon.countryId">
+                                    <option [ngValue]='null'>{{l('PleaseSelect')}}</option>
+                                    <option *ngFor="let c of regions" [value]="c.value">{{c.name}}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <label for="cityId">{{l("City")}}</label>
+                                <select type="text" id="cityId" class="form-control" [(ngModel)]="Coupon.cityId"
+                                    name="cityId" [disabled]="!Coupon.regionId">
+                                    <option [ngValue]='null'>{{l('PleaseSelect')}}</option>
+                                    <option *ngFor="let c of cities" [value]="c.value">{{c.name}}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="col-4 form-group">
+                                <label for="Coupon_Address">{{l("Address")}}</label>
+                                <textarea id="Coupon_Address" class="form-control" [(ngModel)]="Coupon.address"
+                                    name="Address"></textarea>
+                            </div>
+
+                            <div class="col-4 form-group">
+                                <label for="Coupon_Notes">{{l("Notes")}}</label>
+                                <textarea id="Coupon_Notes" class="form-control" [(ngModel)]="Coupon.notes"
+                                    name="Notes"></textarea>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

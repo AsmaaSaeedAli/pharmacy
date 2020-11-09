@@ -61,8 +61,7 @@
                                 <div class="form-group">
                                     <label for="Classes">{{ l("InvoiceStatus") }}</label>
                                     <p-autoComplete [(ngModel)]="invoiceStatues" [suggestions]="filteredInvoiceStatues"
-                                        (completeMethod)="
-                                        ($event)" field="name"
+                                        (completeMethod)="filterInvoiceStatues($event)" field="name"
                                         placeholder="{{ l('InvoiceStatus') }}" [minLength]="searchMinLength"
                                         name="ClassMultiSelectInput" id="ClassMultiSelectInput" [multiple]="true"
                                         styleClass="width-percent-100" [forceSelection]="true">

@@ -1,0 +1,121 @@
+<div [@routerTransition]>
+    <form *ngIf="active" class="col-12" #CouponForm="ngForm" novalidate autocomplete="off">
+        <div class="kt-content kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor">
+            <div class="kt-subheader kt-grid__item">
+                <div [class]="containerClass">
+                    <div class="kt-subheader__main">
+                        <h3 class="mkt-subheader__title">
+                            <span>{{ l("CouponDetails") }}</span>
+                        </h3>
+                    </div>
+                    <div class="kt-subheader__toolbar">
+                        <div class="kt-subheader__wrapper">
+                            <button (click)="close()" [disabled]="saving" class="btn btn-outline-danger">
+                                {{ l("Close") }}
+                            </button>
+                            <button *ngIf="isGranted('Pages.Administration.Coupons.Manage')" (click)="editCoupon()"
+                                class="btn btn-primary">
+                                <i class="fa fa-plus"></i> {{ l("EditCoupon") }}
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div [class]="containerClass + ' kt-grid__item kt-grid__item--fluid'">
+            <div class="kt-portlet kt-portlet--mobile">
+                <div class="kt-portlet__body">
+                    <div class="row align-items-center">
+
+                        <div class="col-4">
+                            <h5>{{l("IsActive")}}</h5>
+                            <span class="kt-switch kt-switch--icon-check">
+                                <label>
+                                    <input type="checkbox" disabled name="isActive" value="true" [(ngModel)]="Coupon.isActive">
+                                    <span></span>
+                                </label>
+                            </span>
+                        </div>
+
+                        <div class="col-4 form-group">
+                            <label for="Coupon_Code" class="required">{{l("Code")}}</label>
+                            <input type="text" id="Coupon_Code" class="form-control" [(ngModel)]="Coupon.code"
+                                name="Code" required disabled />
+                        </div>
+                        <div class="col-4 form-group">
+                            <label for="CouponDiscountRate" class="required">{{l("CouponDiscountRate")}}</label>
+                            <input type="text" id="CouponDiscountRate" class="form-control" [(ngModel)]="Coupon.CouponDiscountRate"
+                                name="Code" required disabled />
+                        </div>
+                        
+                        <div class="col-4 form-group">
+                            <label for="Coupon_Start_Date">{{l("StartDate")}}</label>
+                            <input disabled type="text" #SampleDatePicker id="Coupon_Start_Date" class="form-control"
+                                [(ngModel)]="Coupon.StartDate" name="StartDate" [bsConfig]="{
+                                    showWeekNumbers : false
+                                }" bsDatepicker />
+                        </div>
+                         <div class="col-4 form-group">
+                            <label for="Coupon_End_Date">{{l("EndDate")}}</label>
+                            <input disabled type="text" #SampleDatePicker id="Coupon_End_Date" class="form-control"
+                                [(ngModel)]="Coupon.EndDate._d" name="EndDate" [bsConfig]="{
+                                    showWeekNumbers : false
+                                }" bsDatepicker />
+                        </div>
+                            
+
+                    <!--        
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label for="StartDate">{{ l("FromDate") }}</label>
+                                    <div class="input-group">
+                                        <input id="StartDatePicker" placeholder="{{ l('FromDate') }}"
+                                            style="border: gray 1px solid;background-color: transparent !important"
+                                            readonly type="text" #StartDatePicker name="StartDatePicker"
+                                            class="form-control" [(ngModel)]="startDate"
+                                            [bsConfig]="{  showWeekNumbers : false, dateInputFormat: 'YYYY/MM/DD' }" bsDatepicker
+                                            (bsValueChange)="onChangeStartDate($event)" />
+                                        <span class="input-group-btn">
+                                            <button type="button" class="btn btn-default" style="border: solid gray 1px"
+                                                (click)="resetStartDate()">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                          
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label for="DelegatedEmployees">{{ l("ToDate") }}</label>
+                                    <div class="input-group">
+                                        <input id="EndDatePicker" placeholder="{{ l('ToDate') }}"
+                                            style="border: gray 1px solid; background-color: transparent !important"
+                                            readonly type="text" #EndDatePicker name="EndDatePicker"
+                                            class="form-control" [(ngModel)]="endDate"
+                                            [bsConfig]="{ dateInputFormat: 'YYYY/MM/DD' }" bsDatepicker
+                                            (bsValueChange)="onChangeEndDate($event)" />
+                                        <span class="input-group-btn">
+                                            <button type="button" class="btn btn-default" style="border: solid gray 1px"
+                                                (click)="resetEndDate()">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        <div class="col-4 form-group">
+                            <label for="Coupon_DateOfBirth">{{l("DateOfBirth")}}</label>
+                            <input type="text" disabled id="Coupon_DateOfBirth" class="form-control"
+                                [value]="Coupon.dateOfBirth | momentFormat :  'DD/MM/YYYY'" name="DateOfBirth"  />
+                        </div> -->
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
